@@ -9,7 +9,7 @@ import time
 import os
 
 
-def capture_images(base_dir=r'/home/james/projects/virtual_marley/raw_imgs', delay=10, night_fac=12):
+def capture_images(base_dir=r'/home/james/projects/virtual_marley/raw_imgs', delay=5, night_fac=20):
     assert os.path.isdir(base_dir), '%s not a directory' % base_dir
     cap = cv2.VideoCapture(0)  #set the port of the camera as before
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
@@ -26,7 +26,7 @@ def capture_images(base_dir=r'/home/james/projects/virtual_marley/raw_imgs', del
         img_filename = '%s.jpg' % datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
         img_path = os.path.join(hour_dir_path, img_filename)
 
-        cv2.imwrite(img_path, newimage, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
+        cv2.imwrite(img_path, newimage, [int(cv2.IMWRITE_JPEG_QUALITY), 90])
         if datetime.now().hour >= 20 or datetime.now().hour <= 5:
             sleeptime = delay * night_fac
         else:
