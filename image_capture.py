@@ -9,7 +9,7 @@ import time
 import os
 
 
-def capture_regular_imagery(base_dir, wait_time_secs=2, night_hour_multiplyer=1):
+def capture_images(base_dir, delay=3, night_fac=20):
     assert os.path.isdir(base_dir), '%s not a directory' % base_dir
     cap = cv2.VideoCapture(0)  #set the port of the camera as before
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
@@ -20,11 +20,15 @@ def capture_regular_imagery(base_dir, wait_time_secs=2, night_hour_multiplyer=1)
         if not os.path.isdir(hour_dir_path):
             os.makedirs(hour_dir_path)
         retval, image = cap.read()
+        newimage = cv2.flip(image, 0)
+        newimage = cv2.flip(newimage, 1)
+
         img_filename = '%s.png' % datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
         img_path = os.path.join(hour_dir_path, img_filename)
-        cv2.imwrite(img_path, image)
+        
+        cv2.imwrite(img_path, newimage)
         if datetime.now().hour >= 20 or datetime.now().hour <= 5:
-            sleeptime = wait_time_secs * night_hour_multiplyer
+            sleeptime = delay * night_fac
         else:
-            sleeptime = wait_time_secs
+            sleeptime = delay
         time.sleep(sleeptime - 0.107)
